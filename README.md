@@ -82,15 +82,40 @@ The two reward scripts read another mod's save data on a timer because those mod
 advancement trigger. That's server plumbing rather than a clean integration, included because
 it works rather than because it's pretty.
 
-## A note on the G-max display
+## A note on the G-max display, including what does NOT work
 
-Setting `dynamax_form` doesn't do it. What works is `pokeedit <slot> form=gmax`, reverted with
-`form=normal`; `dynamax_form=none` and `unaspect=gmax` both print "Edited ..." and quietly do
-nothing. Gate it on `GmaxFactor` so the form stays something a player earned with a Max Soup.
+`pokeedit <slot> form=gmax` shows the form. Gate it on `GmaxFactor` so it stays something a
+player earned with a Max Soup. It's rideable, and stays normal-sized because the 4× comes from
+`startGradualScaling` on the battle path rather than from the form.
 
-The form is rideable and stays normal-sized, because the 4× comes from `startGradualScaling` on
-the battle path rather than from the form. An already-summoned Pokémon keeps rendering its old
-model until it's recalled and resummoned.
+**Turning it back off is the unsolved part.** The model follows the `gmax` *aspect*, which
+comes from Cobblemon's `dynamax_form` species feature — not from `FormId`. That feature is:
+
+```json
+{"type":"choice","keys":["dynamax_form"],"default":"none",
+ "choices":["gmax","eternamax"],"isAspect":true,"aspectFormat":"{{choice}}"}
+```
+
+`none` is the default but is **not one of the choices**, so `pokeedit dynamax_form=none` is
+rejected by the choice validator and prints "Edited ..." having done nothing. Neither
+`unaspect=gmax`, `gmax=false` nor an empty value clears it either. `form=normal` changes
+`FormId` only, which does not affect the model at all — if you verify a revert by reading
+`FormId` you will get a false success, which is exactly the trap this repo fell into.
+
+The only thing that clears it is `/msd hard_reset`, which walks the entire party **and PC**,
+reverts every Mega and G-max, and clears `GmaxFactor` — so players have to re-feed Max Soups.
+That is far too blunt to use as a toggle.
+
+The proper fix is a server-side sidemod calling Mega Showdown's own revert for a single
+Pokémon, which is what `hard_reset` does internally:
+
+```java
+Effect.getEffect("mega_showdown:dynamax")
+      .revertEffects(pokemon, List.of("dynamax_form=none"), Optional.empty(), null);
+```
+
+Not built yet. Until it is, `gmaxwatch.py`'s revert path reports success while doing nothing
+visible.
 
 ## What is deliberately not here
 
