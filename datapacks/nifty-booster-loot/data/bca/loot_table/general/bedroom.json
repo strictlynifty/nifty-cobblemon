@@ -1,0 +1,58 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": {
+        "min": 10,
+        "max": 16
+      },
+      "entries": [
+        {
+          "type": "loot_table",
+          "value": "bca:support_tables/apricorn",
+          "weight": 20
+        },
+        {
+          "type": "loot_table",
+          "value": "bca:support_tables/poke_balls",
+          "weight": 8
+        },
+        {
+          "type": "loot_table",
+          "value": "bca:support_tables/backpacks",
+          "weight": 3
+        },
+        {
+          "type": "loot_table",
+          "value": "bca:support_tables/poke_gear",
+          "weight": 3
+        },
+        {
+          "type": "loot_table",
+          "value": "bca:support_tables/upgrades",
+          "weight": 5
+        },
+        {
+          "type": "item",
+          "name": "minecraft:air",
+          "weight": 40
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "cobblemon-cards:booster_pack",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:air",
+          "weight": 594
+        }
+      ]
+    }
+  ]
+}

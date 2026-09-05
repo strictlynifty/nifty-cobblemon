@@ -1,0 +1,40 @@
+{
+  "display": {
+    "icon": {
+      "id": "cobblemon-cards:booster_pack_gen4"
+    },
+    "title": "Sinnoh Champion",
+    "description": "Defeat the Champion of the bdsp series.",
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "champion": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "champion_cynthia_03a5"
+        ],
+        "trainer_type": null
+      }
+    }
+  },
+  "requirements": [
+    [
+      "champion"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "nifty:rewards/booster_pack_gen4"
+    ],
+    "function": "nifty:reward/series_bdsp_champ"
+  },
+  "parent": "nifty:series/bdsp_8"
+}

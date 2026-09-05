@@ -1,0 +1,74 @@
+{
+  "display": {
+    "icon": {
+      "id": "cobblemon-cards:god_pack_ticket"
+    },
+    "title": "Triple Crown",
+    "description": "Defeat the Champion of all three battle series.",
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "champion_radicalred": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "champion_terry_01b6",
+          "champion_terry_01b7",
+          "champion_terry_01b8"
+        ],
+        "trainer_type": null
+      }
+    },
+    "champion_bdsp": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "champion_cynthia_03a5"
+        ],
+        "trainer_type": null
+      }
+    },
+    "champion_unbound": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "champion_jax_05b7"
+        ],
+        "trainer_type": null
+      }
+    }
+  },
+  "requirements": [
+    [
+      "champion_radicalred"
+    ],
+    [
+      "champion_bdsp"
+    ],
+    [
+      "champion_unbound"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "nifty:rewards/god_pack_ticket"
+    ],
+    "function": "nifty:reward/series_all_champions"
+  },
+  "parent": "nifty:root"
+}

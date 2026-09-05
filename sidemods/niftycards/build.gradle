@@ -1,0 +1,45 @@
+// Server-side sidemod. Cobblemon Cards is CC0-1.0 (public domain), so mixing into it and
+// shipping the result carries no licence obligation at all - unlike Mega Showdown, which is
+// why the wheel button had to avoid touching that mod's code.
+//
+// Architectury loom and Kotlin 2.2.x are required for the same reason as niftygmax: Cobblemon
+// is built with Kotlin 2.2 and older loom cannot remap it.
+plugins {
+    id 'dev.architectury.loom' version '1.11-SNAPSHOT'
+    id 'org.jetbrains.kotlin.jvm' version '2.2.10'
+}
+
+version = project.mod_version
+group = project.maven_group
+base { archivesName = project.archives_name }
+
+repositories {
+    mavenCentral()
+    maven { name = 'cobblemon'; url = uri('https://artefacts.cobblemon.com/releases') }
+    maven { url = 'https://maven.fabricmc.net/' }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
+
+    // Neither is bundled or redistributed - compile only.
+    modCompileOnly "com.cobblemon:fabric:${project.cobblemon_version}"
+    // The distributed cards jar is only shims; every real class - BinderSpawnModifier
+    // included - lives in its NESTED META-INF/jars/common-1.0.0.jar, extracted here.
+    // Fabric loads that nested jar at runtime, so the mixin target exists in game.
+    compileOnly files("libs/cobblemoncards-common-1.0.0.jar")
+}
+
+processResources {
+    inputs.property 'version', project.version
+    filesMatching('fabric.mod.json') { expand version: project.version }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+tasks.withType(JavaCompile).configureEach { it.options.release = 21 }

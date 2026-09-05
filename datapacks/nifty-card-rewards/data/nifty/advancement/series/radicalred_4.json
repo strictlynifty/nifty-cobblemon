@@ -1,0 +1,520 @@
+{
+  "display": {
+    "icon": {
+      "id": "cobblemon-cards:booster_pack_poison"
+    },
+    "title": "Four Badges: Kanto",
+    "description": "Defeat four Gym Leaders in the radicalred series.",
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "leader_0": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "leader_brock_019e"
+        ],
+        "trainer_type": null
+      }
+    },
+    "leader_1": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "leader_misty_019f"
+        ],
+        "trainer_type": null
+      }
+    },
+    "leader_2": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "leader_lt_surge_01a0"
+        ],
+        "trainer_type": null
+      }
+    },
+    "leader_3": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "leader_erika_01a1"
+        ],
+        "trainer_type": null
+      }
+    },
+    "leader_4": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "leader_koga_01a2"
+        ],
+        "trainer_type": null
+      }
+    },
+    "leader_5": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "leader_sabrina_01a4"
+        ],
+        "trainer_type": null
+      }
+    },
+    "leader_6": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "leader_blaine_01a3"
+        ],
+        "trainer_type": null
+      }
+    },
+    "leader_7": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "leader_clair_004a"
+        ],
+        "trainer_type": null
+      }
+    }
+  },
+  "requirements": [
+    [
+      "leader_0",
+      "leader_1",
+      "leader_2",
+      "leader_3",
+      "leader_4"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_2",
+      "leader_3",
+      "leader_5"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_2",
+      "leader_3",
+      "leader_6"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_2",
+      "leader_3",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_2",
+      "leader_4",
+      "leader_5"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_2",
+      "leader_4",
+      "leader_6"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_2",
+      "leader_4",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_2",
+      "leader_5",
+      "leader_6"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_2",
+      "leader_5",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_2",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_3",
+      "leader_4",
+      "leader_5"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_3",
+      "leader_4",
+      "leader_6"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_3",
+      "leader_4",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_3",
+      "leader_5",
+      "leader_6"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_3",
+      "leader_5",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_3",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_4",
+      "leader_5",
+      "leader_6"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_4",
+      "leader_5",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_4",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_5",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_2",
+      "leader_3",
+      "leader_4",
+      "leader_5"
+    ],
+    [
+      "leader_0",
+      "leader_2",
+      "leader_3",
+      "leader_4",
+      "leader_6"
+    ],
+    [
+      "leader_0",
+      "leader_2",
+      "leader_3",
+      "leader_4",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_2",
+      "leader_3",
+      "leader_5",
+      "leader_6"
+    ],
+    [
+      "leader_0",
+      "leader_2",
+      "leader_3",
+      "leader_5",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_2",
+      "leader_3",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_2",
+      "leader_4",
+      "leader_5",
+      "leader_6"
+    ],
+    [
+      "leader_0",
+      "leader_2",
+      "leader_4",
+      "leader_5",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_2",
+      "leader_4",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_2",
+      "leader_5",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_3",
+      "leader_4",
+      "leader_5",
+      "leader_6"
+    ],
+    [
+      "leader_0",
+      "leader_3",
+      "leader_4",
+      "leader_5",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_3",
+      "leader_4",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_3",
+      "leader_5",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_4",
+      "leader_5",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_1",
+      "leader_2",
+      "leader_3",
+      "leader_4",
+      "leader_5"
+    ],
+    [
+      "leader_1",
+      "leader_2",
+      "leader_3",
+      "leader_4",
+      "leader_6"
+    ],
+    [
+      "leader_1",
+      "leader_2",
+      "leader_3",
+      "leader_4",
+      "leader_7"
+    ],
+    [
+      "leader_1",
+      "leader_2",
+      "leader_3",
+      "leader_5",
+      "leader_6"
+    ],
+    [
+      "leader_1",
+      "leader_2",
+      "leader_3",
+      "leader_5",
+      "leader_7"
+    ],
+    [
+      "leader_1",
+      "leader_2",
+      "leader_3",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_1",
+      "leader_2",
+      "leader_4",
+      "leader_5",
+      "leader_6"
+    ],
+    [
+      "leader_1",
+      "leader_2",
+      "leader_4",
+      "leader_5",
+      "leader_7"
+    ],
+    [
+      "leader_1",
+      "leader_2",
+      "leader_4",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_1",
+      "leader_2",
+      "leader_5",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_1",
+      "leader_3",
+      "leader_4",
+      "leader_5",
+      "leader_6"
+    ],
+    [
+      "leader_1",
+      "leader_3",
+      "leader_4",
+      "leader_5",
+      "leader_7"
+    ],
+    [
+      "leader_1",
+      "leader_3",
+      "leader_4",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_1",
+      "leader_3",
+      "leader_5",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_1",
+      "leader_4",
+      "leader_5",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_2",
+      "leader_3",
+      "leader_4",
+      "leader_5",
+      "leader_6"
+    ],
+    [
+      "leader_2",
+      "leader_3",
+      "leader_4",
+      "leader_5",
+      "leader_7"
+    ],
+    [
+      "leader_2",
+      "leader_3",
+      "leader_4",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_2",
+      "leader_3",
+      "leader_5",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_2",
+      "leader_4",
+      "leader_5",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_3",
+      "leader_4",
+      "leader_5",
+      "leader_6",
+      "leader_7"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "nifty:rewards/booster_pack_poison"
+    ],
+    "function": "nifty:reward/series_radicalred_4"
+  },
+  "parent": "nifty:root"
+}

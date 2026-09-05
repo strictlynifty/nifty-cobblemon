@@ -1,0 +1,520 @@
+{
+  "display": {
+    "icon": {
+      "id": "cobblemon-cards:booster_pack_ice"
+    },
+    "title": "Four Badges: Sinnoh",
+    "description": "Defeat four Gym Leaders in the bdsp series.",
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "leader_0": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "gym_leader_roark_0395"
+        ],
+        "trainer_type": null
+      }
+    },
+    "leader_1": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "gym_leader_gardenia_03d6"
+        ],
+        "trainer_type": null
+      }
+    },
+    "leader_2": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "gym_leader_maylene_03d8"
+        ],
+        "trainer_type": null
+      }
+    },
+    "leader_3": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "gym_leader_wake_03d7"
+        ],
+        "trainer_type": null
+      }
+    },
+    "leader_4": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "gym_leader_fantina_03d9"
+        ],
+        "trainer_type": null
+      }
+    },
+    "leader_5": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "gym_leader_byron_0399"
+        ],
+        "trainer_type": null
+      }
+    },
+    "leader_6": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "gym_leader_candice_03da"
+        ],
+        "trainer_type": null
+      }
+    },
+    "leader_7": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "gym_leader_volkner_03db"
+        ],
+        "trainer_type": null
+      }
+    }
+  },
+  "requirements": [
+    [
+      "leader_0",
+      "leader_1",
+      "leader_2",
+      "leader_3",
+      "leader_4"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_2",
+      "leader_3",
+      "leader_5"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_2",
+      "leader_3",
+      "leader_6"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_2",
+      "leader_3",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_2",
+      "leader_4",
+      "leader_5"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_2",
+      "leader_4",
+      "leader_6"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_2",
+      "leader_4",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_2",
+      "leader_5",
+      "leader_6"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_2",
+      "leader_5",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_2",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_3",
+      "leader_4",
+      "leader_5"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_3",
+      "leader_4",
+      "leader_6"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_3",
+      "leader_4",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_3",
+      "leader_5",
+      "leader_6"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_3",
+      "leader_5",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_3",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_4",
+      "leader_5",
+      "leader_6"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_4",
+      "leader_5",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_4",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_1",
+      "leader_5",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_2",
+      "leader_3",
+      "leader_4",
+      "leader_5"
+    ],
+    [
+      "leader_0",
+      "leader_2",
+      "leader_3",
+      "leader_4",
+      "leader_6"
+    ],
+    [
+      "leader_0",
+      "leader_2",
+      "leader_3",
+      "leader_4",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_2",
+      "leader_3",
+      "leader_5",
+      "leader_6"
+    ],
+    [
+      "leader_0",
+      "leader_2",
+      "leader_3",
+      "leader_5",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_2",
+      "leader_3",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_2",
+      "leader_4",
+      "leader_5",
+      "leader_6"
+    ],
+    [
+      "leader_0",
+      "leader_2",
+      "leader_4",
+      "leader_5",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_2",
+      "leader_4",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_2",
+      "leader_5",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_3",
+      "leader_4",
+      "leader_5",
+      "leader_6"
+    ],
+    [
+      "leader_0",
+      "leader_3",
+      "leader_4",
+      "leader_5",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_3",
+      "leader_4",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_3",
+      "leader_5",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_0",
+      "leader_4",
+      "leader_5",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_1",
+      "leader_2",
+      "leader_3",
+      "leader_4",
+      "leader_5"
+    ],
+    [
+      "leader_1",
+      "leader_2",
+      "leader_3",
+      "leader_4",
+      "leader_6"
+    ],
+    [
+      "leader_1",
+      "leader_2",
+      "leader_3",
+      "leader_4",
+      "leader_7"
+    ],
+    [
+      "leader_1",
+      "leader_2",
+      "leader_3",
+      "leader_5",
+      "leader_6"
+    ],
+    [
+      "leader_1",
+      "leader_2",
+      "leader_3",
+      "leader_5",
+      "leader_7"
+    ],
+    [
+      "leader_1",
+      "leader_2",
+      "leader_3",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_1",
+      "leader_2",
+      "leader_4",
+      "leader_5",
+      "leader_6"
+    ],
+    [
+      "leader_1",
+      "leader_2",
+      "leader_4",
+      "leader_5",
+      "leader_7"
+    ],
+    [
+      "leader_1",
+      "leader_2",
+      "leader_4",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_1",
+      "leader_2",
+      "leader_5",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_1",
+      "leader_3",
+      "leader_4",
+      "leader_5",
+      "leader_6"
+    ],
+    [
+      "leader_1",
+      "leader_3",
+      "leader_4",
+      "leader_5",
+      "leader_7"
+    ],
+    [
+      "leader_1",
+      "leader_3",
+      "leader_4",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_1",
+      "leader_3",
+      "leader_5",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_1",
+      "leader_4",
+      "leader_5",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_2",
+      "leader_3",
+      "leader_4",
+      "leader_5",
+      "leader_6"
+    ],
+    [
+      "leader_2",
+      "leader_3",
+      "leader_4",
+      "leader_5",
+      "leader_7"
+    ],
+    [
+      "leader_2",
+      "leader_3",
+      "leader_4",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_2",
+      "leader_3",
+      "leader_5",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_2",
+      "leader_4",
+      "leader_5",
+      "leader_6",
+      "leader_7"
+    ],
+    [
+      "leader_3",
+      "leader_4",
+      "leader_5",
+      "leader_6",
+      "leader_7"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "nifty:rewards/booster_pack_ice"
+    ],
+    "function": "nifty:reward/series_bdsp_4"
+  },
+  "parent": "nifty:root"
+}

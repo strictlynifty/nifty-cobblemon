@@ -1,0 +1,40 @@
+{
+  "display": {
+    "icon": {
+      "id": "cobblemon-cards:booster_pack_gen3"
+    },
+    "title": "Hoenn Champion",
+    "description": "Defeat the Champion of the unbound series.",
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "champion": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "champion_jax_05b7"
+        ],
+        "trainer_type": null
+      }
+    }
+  },
+  "requirements": [
+    [
+      "champion"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "nifty:rewards/booster_pack_gen3"
+    ],
+    "function": "nifty:reward/series_unbound_champ"
+  },
+  "parent": "nifty:series/unbound_8"
+}

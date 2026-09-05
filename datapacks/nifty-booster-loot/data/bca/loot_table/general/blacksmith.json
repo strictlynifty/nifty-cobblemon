@@ -1,0 +1,63 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": {
+        "min": 10,
+        "max": 16
+      },
+      "entries": [
+        {
+          "type": "loot_table",
+          "value": "bca:support_tables/armor",
+          "weight": 3
+        },
+        {
+          "type": "loot_table",
+          "value": "bca:support_tables/weapons",
+          "weight": 3
+        },
+        {
+          "type": "loot_table",
+          "value": "bca:support_tables/tools",
+          "weight": 3
+        },
+        {
+          "type": "loot_table",
+          "value": "bca:support_tables/combat",
+          "weight": 1
+        },
+        {
+          "type": "loot_table",
+          "value": "bca:item_groups/ingots",
+          "weight": 3
+        },
+        {
+          "type": "loot_table",
+          "value": "bca:item_groups/nuggets",
+          "weight": 5
+        },
+        {
+          "type": "item",
+          "name": "minecraft:air",
+          "weight": 11
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "cobblemon-cards:booster_pack",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:air",
+          "weight": 594
+        }
+      ]
+    }
+  ]
+}

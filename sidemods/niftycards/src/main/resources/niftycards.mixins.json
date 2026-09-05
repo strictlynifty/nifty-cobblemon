@@ -1,0 +1,11 @@
+{
+  "required": false,
+  "package": "xyz.strictlynifty.niftycards.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "server": [
+    "BinderSpawnModifierMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}

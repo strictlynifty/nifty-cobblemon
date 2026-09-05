@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "niftygmax",
+  "version": "${version}",
+  "name": "Nifty Gigantamax Wheel",
+  "description": "Adds a Gigantamax button to Cobblemon's interaction wheel. A sidemod: contains no Mega Showdown code, and issues a server command rather than changing any form itself.",
+  "authors": [
+    "strictlynifty"
+  ],
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "xyz.strictlynifty.niftygmax.NiftyGmaxClient"
+      }
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.17.2",
+    "minecraft": "1.21.1",
+    "java": ">=21",
+    "cobblemon": ">=1.7.3",
+    "fabric-language-kotlin": ">=1.13.0"
+  },
+  "suggests": {
+    "mega_showdown": "*"
+  }
+}

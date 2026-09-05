@@ -1,0 +1,42 @@
+{
+  "display": {
+    "icon": {
+      "id": "cobblemon-cards:booster_pack_gen1"
+    },
+    "title": "Kanto Champion",
+    "description": "Defeat the Champion of the radicalred series.",
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "champion": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "champion_terry_01b6",
+          "champion_terry_01b7",
+          "champion_terry_01b8"
+        ],
+        "trainer_type": null
+      }
+    }
+  },
+  "requirements": [
+    [
+      "champion"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "nifty:rewards/booster_pack_gen1"
+    ],
+    "function": "nifty:reward/series_radicalred_champ"
+  },
+  "parent": "nifty:series/radicalred_8"
+}

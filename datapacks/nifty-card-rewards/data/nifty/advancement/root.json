@@ -1,0 +1,24 @@
+{
+  "display": {
+    "icon": {
+      "id": "cobblemon-cards:booster_pack"
+    },
+    "title": "Trainer Card Rewards",
+    "description": "Booster packs for beating battle series.",
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false,
+    "background": "minecraft:textures/block/amethyst_block.png"
+  },
+  "criteria": {
+    "tick": {
+      "trigger": "minecraft:tick"
+    }
+  },
+  "requirements": [
+    [
+      "tick"
+    ]
+  ]
+}

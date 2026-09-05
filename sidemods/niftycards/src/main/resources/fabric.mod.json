@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "niftycards",
+  "version": "${version}",
+  "name": "Nifty Cards Fixes",
+  "description": "Keeps a Pokemon's shiny when a Binder converts it, and tells the player whose cards did it. Server-side only.",
+  "authors": ["strictlynifty"],
+  "license": "CC0-1.0",
+  "environment": "server",
+  "mixins": [
+    "niftycards.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.17.2",
+    "minecraft": "1.21.1",
+    "java": ">=21",
+    "cobblemon": ">=1.7.3",
+    "cobblemon-cards": "*"
+  }
+}

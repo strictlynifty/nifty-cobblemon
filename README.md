@@ -1,0 +1,95 @@
+# nifty-cobblemon
+
+Odds and ends built for a five-player private [Cobblemon](https://cobblemon.com) server:
+two small sidemods, some datapacks that wire mods together, and the scripts that run it all.
+
+Public domain (CC0). Take anything, change anything, no credit needed, no need to ask.
+
+Nothing here is a polished product. It's what actually runs on one server, cleaned of
+hostnames and player names. Paths default to `$COBBLEMON_DIR` (or `/srv/cobblemon`), so
+expect to adjust things.
+
+## Sidemods
+
+**`sidemods/niftygmax`** — client-only. Adds a Gigantamax button to Cobblemon's interaction
+wheel, next to Mega Evolve.
+
+[Mega Showdown](https://modrinth.com/mod/mega-showdown) has `outSideMega` and
+`outSideUltraBurst` config flags that put Mega and Ultra Burst on the wheel, but no equivalent
+for Gigantamax — a G-max form is only visible mid-battle beside a Power Spot. This subscribes
+to Cobblemon's public `POKEMON_INTERACTION_GUI_CREATION` event and adds an option that sends
+`/trigger gmax set <slot>`; a server-side script does the rest. Contains no Mega Showdown code.
+
+**`sidemods/niftycards`** — server-only. Two changes to
+[Cobblemon Cards](https://modrinth.com/mod/cobblemon-cards) 1.0.4's Binder:
+
+- a converted Pokémon **keeps its shiny**. `transformPokemon` rebuilds it with
+  `Species.create(level)`, so shiny is dropped and re-rolled at base rate — a shiny converted
+  that way is gone, and the log records only what it became
+- the player whose Binder did it is told, so the mechanic is visible to the person causing it
+
+Upstream has since rewritten that system as a `SpawningInfluence` that biases spawn weights
+instead of replacing a spawned Pokémon, which removes the problem properly — but that is
+unreleased as of 1.0.4. The mixin is `required: false`, so on a build without
+`transformPokemon` it simply doesn't apply. **Delete this mod once Cards updates.**
+
+## Datapacks
+
+**`datapacks/nifty-card-rewards`** — booster packs as rewards for progression in *other* mods.
+An advancement using another mod's trigger, rewarding a loot table that grants a Cards item:
+
+```json
+"criteria": { "champion": {
+    "trigger": "rctmod:defeat_count",
+    "conditions": { "count": 1, "trainer_ids": ["champion_terry_01b6"] } } },
+"rewards": { "loot": ["nifty:rewards/booster_pack_gen1"] }
+```
+
+Beat a gym leader or champion in [Radical Cobblemon
+Trainers](https://modrinth.com/mod/radical-cobblemon-trainers), get that generation's pack.
+Anything with an advancement trigger works the same way.
+
+**`datapacks/nifty-booster-loot`** — a rare booster pack in Cobblemon Additions village
+chests: an extra loot pool, pack at weight 1 against `minecraft:air` at 594, so about 1 chest
+in 600. Note this **replaces** the mod's loot tables, so it goes stale when they change theirs;
+`scripts/mkboosterloot.py` regenerates it.
+
+## Scripts
+
+Python, no dependencies, driven by RCON and by reading the server's own save files.
+
+| script | what it does |
+| --- | --- |
+| `gmaxwatch.py` | polls a vanilla `trigger` objective so players can toggle their own G-max display with no client mod |
+| `gmaxdisplay.py` | the eligibility rules — species has a G-max model, and `GmaxFactor` is set |
+| `gmaxassets.py` | lists which species can actually render a G-max form, checked across every jar |
+| `mkgmaxfixes.py` | resource pack fixing Mega Showdown posers that ignore animation clips they ship |
+| `mkseatpack.py` | regenerates a 2-seat mount pack against the installed jars |
+| `mkboosterloot.py` | injects booster packs into another mod's loot tables |
+| `arcphone-rewards.py` | booster packs for Legendary Monuments quest lines |
+| `babylegends-rewards.py` | a reward for registering every Baby Legends species |
+| `rewardutil.py` | shared delivery — confirms an item actually arrived before marking it granted |
+
+The two reward scripts read another mod's save data on a timer because those mods expose no
+advancement trigger. That's server plumbing rather than a clean integration, included because
+it works rather than because it's pretty.
+
+## A note on the G-max display
+
+Setting `dynamax_form` doesn't do it. What works is `pokeedit <slot> form=gmax`, reverted with
+`form=normal`; `dynamax_form=none` and `unaspect=gmax` both print "Edited ..." and quietly do
+nothing. Gate it on `GmaxFactor` so the form stays something a player earned with a Max Soup.
+
+The form is rideable and stays normal-sized, because the 4× comes from `startGradualScaling` on
+the battle path rather than from the form. An already-summoned Pokémon keeps rendering its old
+model until it's recalled and resummoned.
+
+## Building the sidemods
+
+JDK 21 and the Gradle wrapper. Cobblemon resolves from
+`https://artefacts.cobblemon.com/releases`. `niftycards` also needs the Cards jar — extract the
+nested `META-INF/jars/common-1.0.0.jar` from it into `libs/`, since the distributed jar is only
+shims and the class it mixes into lives in there.
+
+Two traps: the Kotlin plugin must be 2.2.x or Loom can't remap Cobblemon, and use
+`dev.architectury.loom` rather than plain `fabric-loom`.

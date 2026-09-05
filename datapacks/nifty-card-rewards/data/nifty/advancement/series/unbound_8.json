@@ -1,0 +1,152 @@
+{
+  "display": {
+    "icon": {
+      "id": "cobblemon-cards:booster_pack_dark"
+    },
+    "title": "Eight Badges: Hoenn",
+    "description": "Defeat every Gym Leader in the unbound series.",
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "leader_0": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "leader_mirskle_05aa"
+        ],
+        "trainer_type": null
+      }
+    },
+    "leader_1": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "leader_vega_05ab"
+        ],
+        "trainer_type": null
+      }
+    },
+    "leader_2": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "leader_alice_05ac"
+        ],
+        "trainer_type": null
+      }
+    },
+    "leader_3": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "leader_mel_05ad"
+        ],
+        "trainer_type": null
+      }
+    },
+    "leader_4": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "leader_galavan_05af"
+        ],
+        "trainer_type": null
+      }
+    },
+    "leader_5": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "leader_big_mo_05b0"
+        ],
+        "trainer_type": null
+      }
+    },
+    "leader_6": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "leader_tessy_05b1"
+        ],
+        "trainer_type": null
+      }
+    },
+    "leader_7": {
+      "trigger": "rctmod:defeat_count",
+      "conditions": {
+        "count": 1,
+        "entity": {
+          "type": null
+        },
+        "trainer_ids": [
+          "leader_benjamin_05b2"
+        ],
+        "trainer_type": null
+      }
+    }
+  },
+  "requirements": [
+    [
+      "leader_0"
+    ],
+    [
+      "leader_1"
+    ],
+    [
+      "leader_2"
+    ],
+    [
+      "leader_3"
+    ],
+    [
+      "leader_4"
+    ],
+    [
+      "leader_5"
+    ],
+    [
+      "leader_6"
+    ],
+    [
+      "leader_7"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "nifty:rewards/booster_pack_dark"
+    ],
+    "function": "nifty:reward/series_unbound_8"
+  },
+  "parent": "nifty:series/unbound_4"
+}

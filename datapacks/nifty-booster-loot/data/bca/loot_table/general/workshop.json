@@ -1,0 +1,53 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": {
+        "min": 10,
+        "max": 16
+      },
+      "entries": [
+        {
+          "type": "loot_table",
+          "value": "bca:support_tables/workshop",
+          "weight": 10
+        },
+        {
+          "type": "loot_table",
+          "value": "bca:support_tables/poke_rods",
+          "weight": 3
+        },
+        {
+          "type": "loot_table",
+          "value": "bca:support_tables/evolution",
+          "weight": 1
+        },
+        {
+          "type": "loot_table",
+          "value": "bca:support_tables/redstone_tech",
+          "weight": 10
+        },
+        {
+          "type": "item",
+          "name": "minecraft:air",
+          "weight": 40
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "cobblemon-cards:booster_pack",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:air",
+          "weight": 594
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+// A SIDEMOD, deliberately. Mega Showdown's licence (v2.1 §1.3) allows sidemods - separate
+// addons that interact with it but contain none of its code - to be built and distributed
+// without permission, while a modified build of the mod itself would need written approval
+// before being handed to anyone. This project contains no Mega Showdown code: it talks to
+// Cobblemon's public interaction-wheel API and issues a server command.
+plugins {
+    id 'dev.architectury.loom' version '1.11-SNAPSHOT'
+    // 2.2.x, matching what Cobblemon and Mega Showdown are built with. Loom picks its
+    // kotlinx-metadata support from the Kotlin plugin on the classpath, so an older plugin
+    // here makes it fail to remap Cobblemon: "cannot write metadata for future compiler
+    // versions. Requested 2.2.0, but highest known version is 2.1.0".
+    id 'org.jetbrains.kotlin.jvm' version '2.2.10'
+}
+
+version = project.mod_version
+group = project.maven_group
+base { archivesName = project.archives_name }
+
+repositories {
+    mavenCentral()
+    maven { name = 'cobblemon'; url = uri('https://artefacts.cobblemon.com/releases') }
+    maven { url = 'https://maven.fabricmc.net/' }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    // Cobblemon builds against official Mojang mappings, so match them or every
+    // Cobblemon symbol resolves under a different name.
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
+    // fabric-language-kotlin is NOT a compile dependency: it is a runtime language adapter,
+    // and the Kotlin plugin already puts the stdlib on the compile classpath. Declaring it here
+    // made loom try to remap it, which fails - FLK 1.13.x carries Kotlin 2.2 metadata and
+    // loom 1.9's remapper only understands 2.1. It stays a depends entry in fabric.mod.json,
+    // and Cobblemon bundles it at runtime.
+
+    // compileOnly: we never bundle or redistribute any part of Cobblemon.
+    modCompileOnly "com.cobblemon:fabric:${project.cobblemon_version}"
+}
+
+processResources {
+    inputs.property 'version', project.version
+    filesMatching('fabric.mod.json') { expand version: project.version }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+    withSourcesJar()
+}
+
+kotlin { jvmToolchain(21) }
+
+tasks.withType(JavaCompile).configureEach { it.options.release = 21 }
