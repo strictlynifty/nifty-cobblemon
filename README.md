@@ -5,6 +5,14 @@ two small sidemods, some datapacks that wire mods together, and the scripts that
 
 Public domain (CC0). Take anything, change anything, no credit needed, no need to ask.
 
+Built on other people's work — go give them a look:
+[Cobblemon](https://cobblemon.com) ·
+[Cobblemon Cards](https://github.com/Howlite-UI/CobblemonCards) (CC0, by Howlite) ·
+[Mega Showdown](https://github.com/yajatkaul/CobblemonMegaShowdown) (by YajatKaul) ·
+[Radical Cobblemon Trainers](https://modrinth.com/mod/radical-cobblemon-trainers) ·
+[Cobblemon Additions](https://modrinth.com/mod/cobblemon-additions) ·
+[Legendary Monuments](https://modrinth.com/mod/legendary-monuments)
+
 Nothing here is a polished product. It's what actually runs on one server, cleaned of
 hostnames and player names. Paths default to `$COBBLEMON_DIR` (or `/srv/cobblemon`), so
 expect to adjust things.
@@ -83,6 +91,17 @@ nothing. Gate it on `GmaxFactor` so the form stays something a player earned wit
 The form is rideable and stays normal-sized, because the 4× comes from `startGradualScaling` on
 the battle path rather than from the form. An already-summoned Pokémon keeps rendering its old
 model until it's recalled and resummoned.
+
+## What is deliberately not here
+
+**The 2-seat mount resource pack.** `scripts/mkseatpack.py` builds it, but the pack itself is
+515 Cobblemon and Mega Showdown geometry files with a `locator_seat_2` bone added. Mega
+Showdown licenses its assets CC BY-NC-SA 4.0, which is ShareAlike — those files cannot be
+redistributed under CC0. Run the script against your own installed jars instead; it only ever
+touches files you already have.
+
+The same goes for `mkgmaxfixes.py`, which patches Mega Showdown posers. The tool is here; the
+output is not.
 
 ## Building the sidemods
 
