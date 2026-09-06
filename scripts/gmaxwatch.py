@@ -137,11 +137,16 @@ def toggle(player, slot):
         log("REFUSED %s slot %d: %s" % (player, slot, why))
         return
 
+    # `dynamax_form=gmax` sets the FEATURE, which is what drives the aspect and therefore the
+    # model. `form=gmax` sets FormId and nothing else - it appeared to work only because
+    # these Pokemon already had the feature set from battle Dynamax, which hid the fact that
+    # apply was as broken as revert.
+    #
     # Retry the command, not just the read: a dropped rcon call and a form that will not take
     # look identical from one sample.
     after = {}
     for _ in range(2):
-        rcon("execute as %s run pokeedit %d form=gmax" % (player, slot))
+        rcon("execute as %s run pokeedit %d dynamax_form=gmax" % (player, slot))
         for _ in range(3):
             time.sleep(1.5)
             after = G.party(uuid).get(slot - 1) or {}
@@ -150,8 +155,7 @@ def toggle(player, slot):
         if gmax_shown(after):
             break
     if gmax_shown(after):
-        tell(player, "%s is showing its Gigantamax form. Recall and resummon it if the "
-                      "model has not changed yet." % name, "light_purple")
+        tell(player, "%s is showing its Gigantamax form." % name, "light_purple")
         log("APPLY %s slot %d (%s)" % (player, slot, name))
     else:
         tell(player, "Could not change %s - tell an admin." % name, "red")

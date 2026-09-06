@@ -11,13 +11,18 @@ Power Spot condition. So the form can be shown anywhere. What must NOT be lost i
 earned: this only applies to a Pokemon whose GmaxFactor is 1, i.e. one that has actually
 been fed a Max Soup, exactly as a Mega needs its stone held.
 
-MECHANISM, all established by testing on 1.9.5 (see COBBLEMON-GOTCHAS.md):
-  apply   pokeedit <slot> form=gmax             works
-  revert  pokeedit <slot> form=normal           works, PER POKEMON, GmaxFactor untouched
-  revert  msd hard_reset                        also works but resets the player's WHOLE
-                                                party+PC and CLEARS GmaxFactor - avoid
-  no-op   pokeedit dynamax_form=none / =normal  silently does nothing
-  no-op   pokeedit unaspect=gmax / gmax=false   silently does nothing
+MECHANISM. The model follows the `gmax` ASPECT, which comes from Cobblemon's dynamax_form
+species feature. FormId is a DIFFERENT field and changing it does nothing visible - every
+revert once verified against FormId was a false success.
+
+  apply   pokeedit <slot> dynamax_form=gmax   works - `gmax` is a legal choice
+  revert  /niftygmax revert <player> <slot>   the niftygmaxserver sidemod; GmaxFactor kept
+  no-op   pokeedit form=gmax / form=normal    sets FormId only, model unchanged
+  no-op   pokeedit dynamax_form=none          `none` is the DEFAULT but not among the
+                                              feature's choices, so it is rejected
+  no-op   pokeedit unaspect=gmax / gmax=false silently does nothing
+  avoid   msd hard_reset                      works but wipes the whole party+PC and
+                                              CLEARS GmaxFactor
 `pokeedit` prints "Edited <player>'s <mon>." for every input, valid or not, so its output
 proves nothing - always read the saved NBT back. Read it MORE THAN ONCE: a single read after
 a fixed delay caught a stale file and made a working revert look like a no-op.
@@ -31,7 +36,7 @@ Usage:
 """
 import subprocess, sys, os, glob, json, time
 
-BASE = os.environ.get("COBBLEMON_DIR", BASE)
+BASE = os.environ.get("COBBLEMON_DIR", "/srv/cobblemon")
 sys.path.insert(0, "/tmp")
 sys.path.insert(0, BASE)
 LOG = os.path.join(BASE, "logs", "gmaxdisplay.log")
@@ -186,7 +191,7 @@ def main():
         # a working revert got recorded as a no-op during testing.
         again = {}
         for attempt in range(3):
-            rcon("execute as %s run pokeedit %d form=gmax" % (who, slot))
+            rcon("execute as %s run pokeedit %d dynamax_form=gmax" % (who, slot))
             for _ in range(3):
                 time.sleep(2)
                 again = party(uuid).get(slot - 1) or {}

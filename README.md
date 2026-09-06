@@ -87,42 +87,51 @@ The two reward scripts read another mod's save data on a timer because those mod
 advancement trigger. That's server plumbing rather than a clean integration, included because
 it works rather than because it's pretty.
 
-## A note on the G-max display, including what does NOT work
+## A note on the G-max display
 
-`pokeedit <slot> form=gmax` shows the form. Gate it on `GmaxFactor` so it stays something a
-player earned with a Max Soup. It's rideable, and stays normal-sized because the 4× comes from
-`startGradualScaling` on the battle path rather than from the form.
+The display follows the **`gmax` aspect**, which comes from Cobblemon's `dynamax_form` species
+feature. `FormId` is a *different field*, and changing it does nothing visible. That distinction
+is the whole story here — verifying against `FormId` gives false successes in both directions.
 
-**Turning it back off needs a mod.** The model follows the `gmax` *aspect*, which comes from
-Cobblemon's `dynamax_form` species feature — not from `FormId`. That feature is:
+```
+apply   pokeedit <slot> dynamax_form=gmax     works: gmax IS one of the feature's choices
+revert  /niftygmax revert <player> <slot>     needs the sidemod, see below
+no-op   pokeedit form=gmax / form=normal      sets FormId only; model unchanged
+no-op   pokeedit dynamax_form=none            "none" is the DEFAULT but NOT among the choices,
+                                              so the validator rejects it
+no-op   pokeedit unaspect=gmax / gmax=false   nothing
+avoid   /msd hard_reset                       works, but walks the whole party AND PC and
+                                              wipes GmaxFactor
+```
+
+The feature is a choice type:
 
 ```json
 {"type":"choice","keys":["dynamax_form"],"default":"none",
  "choices":["gmax","eternamax"],"isAspect":true,"aspectFormat":"{{choice}}"}
 ```
 
-`none` is the default but is **not one of the choices**, so `pokeedit dynamax_form=none` is
-rejected by the validator while still printing "Edited ...". `unaspect=gmax` and `gmax=false`
-do nothing either, and `aspect=gmax=false` makes it worse by setting `FormId` back to `gmax`.
-`form=normal` changes `FormId` only, which does not affect the model at all — **if you verify
-a revert by reading `FormId` you will get a false success**, which is the trap this project
-spent a long time in.
-
-`sidemods/niftygmaxserver` fixes it with `/niftygmax revert <player> <slot>`, making the same
-call `/msd hard_reset` makes internally, for one Pokémon:
+`none` being the default but not a choice is why the obvious revert silently fails while
+`pokeedit` still prints "Edited ...". `sidemods/niftygmaxserver` works around it by making the
+same call `hard_reset` makes internally, for one Pokémon:
 
 ```java
 Effect.getEffect("mega_showdown:dynamax")
       .revertEffects(pokemon, List.of("dynamax_form=none"), Optional.empty(), null);
 ```
 
-Verified end to end: the aspect clears and **`GmaxFactor` is preserved**, so reverting costs
-the player nothing — unlike `hard_reset`, which walks the whole party *and* PC and wipes
-`GmaxFactor` so everyone has to re-feed Max Soups.
+Gate it on `GmaxFactor` so the form stays something a player earned with a Max Soup — reverting
+preserves it, so toggling costs nothing.
 
-One thing that will waste your time: Cobblemon's party store persists on its own schedule, not
-on `save-all`. A successful revert can take up to a minute to appear in the `.dat`. Trust the
-command's answer, not the file.
+**Setting the feature updates the model live.** No recall, no resummon. The form is also
+rideable, and stays normal-sized because the 4× comes from `startGradualScaling` on the battle
+path rather than from the form.
+
+Two things that will waste your time. Cobblemon's party store persists on its own schedule, not
+on `save-all` — a successful change can take a minute to reach the `.dat`, so trust the command
+rather than the file. And do not test on a Pokémon that is already in the target state: every
+G-max test here ran on Pokémon that were already G-max, which hid a completely broken apply for
+months.
 
 ## What is deliberately not here
 
