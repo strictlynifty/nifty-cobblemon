@@ -1,0 +1,44 @@
+// Server-side companion to niftygmax. Kept as a SEPARATE mod so the client jar the players
+// already have does not need reissuing - only the server installs this one.
+//
+// Mega Showdown is compileOnly and never bundled. Its licence (v2.1 §1.3) permits sidemods
+// that interact with it without containing its code; calling one public method is interaction.
+plugins {
+    id 'dev.architectury.loom' version '1.11-SNAPSHOT'
+    id 'org.jetbrains.kotlin.jvm' version '2.2.10'
+}
+
+version = project.mod_version
+group = project.maven_group
+base { archivesName = project.archives_name }
+
+repositories {
+    mavenCentral()
+    maven { name = 'cobblemon'; url = uri('https://artefacts.cobblemon.com/releases') }
+    maven { url = 'https://maven.fabricmc.net/' }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
+    // ONLY the command module, not all of fabric-api. Pulling the whole thing fails to remap
+    // on a duplicate package-info between fabric-convention-tags-v2 and fabric-tag-api-v1.
+    modImplementation fabricApi.module("fabric-command-api-v2", "0.116.15+1.21.1")
+    modCompileOnly "com.cobblemon:fabric:${project.cobblemon_version}"
+    // modCompileOnly, not compileOnly: the published jar is intermediary-mapped, so its
+    // signatures mention net.minecraft.class_2960 and the compiler cannot resolve the
+    // getEffect overload against Mojang mappings until loom remaps it.
+    modCompileOnly files("libs/mega_showdown-1.9.5.jar")
+}
+
+processResources {
+    inputs.property 'version', project.version
+    filesMatching('fabric.mod.json') { expand version: project.version }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+tasks.withType(JavaCompile).configureEach { it.options.release = 21 }

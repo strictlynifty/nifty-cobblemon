@@ -26,7 +26,7 @@ something.
 """
 import subprocess, sys, os, time, re
 
-BASE = os.environ.get("COBBLEMON_DIR", BASE)
+BASE = os.environ.get("COBBLEMON_DIR", "/srv/cobblemon")
 sys.path.insert(0, BASE)
 import gmaxdisplay as G                      # single source of truth for the rules
 
@@ -82,6 +82,18 @@ def clear(player):
     rcon("scoreboard players enable %s %s" % (player, OBJ))
 
 
+def gmax_shown(mon):
+    """Is this Pokemon actually displaying its Gigantamax form?
+
+    Read the dynamax_form FEATURE, not FormId. FormId can say "normal" while the model is
+    still gmax - checking it is what made every earlier revert report a false success.
+    """
+    for f in (mon.get("Features") or []):
+        if str(f.get("cobblemon:feature_id")) == "dynamax_form":
+            return str(f.get("dynamax_form")) == "gmax"
+    return False
+
+
 def toggle(player, slot):
     """Apply or revert one party slot, enforcing exactly gmaxdisplay's rules."""
     uuid = next((u for u, n in G.names().items() if n == player), None)
@@ -98,28 +110,25 @@ def toggle(player, slot):
         return
     name = G.bare(mon).title()
 
-    if str(mon.get("FormId")) == "gmax":
-        # Sample repeatedly, exactly as the apply path does. Reading once after a single
-        # delay reported REVERT FAILED on reverts that had in fact worked - the save is
-        # asynchronous and the first read can beat it to disk.
-        after = {}
-        for _ in range(2):
-            rcon("execute as %s run pokeedit %d form=normal" % (player, slot))
-            for _ in range(3):
-                time.sleep(1.5)
-                after = G.party(uuid).get(slot - 1) or {}
-                if str(after.get("FormId")) != "gmax":
-                    break
-            if str(after.get("FormId")) != "gmax":
-                break
-        if str(after.get("FormId")) != "gmax":
-            tell(player, "%s is back to its normal form. Recall and resummon it to see "
-                          "the change - an already-summoned Pokemon keeps the old model until "
-                          "the client re-receives it." % name)
+    if gmax_shown(mon):
+        # `pokeedit form=normal` does NOT do this. The model follows the `gmax` aspect, which
+        # comes from the dynamax_form species feature; form=normal changes FormId, a different
+        # field, and nothing visible happens. dynamax_form is a choice feature whose default
+        # "none" is not among its choices, so pokeedit rejects it while printing "Edited ...".
+        # niftygmaxserver makes Mega Showdown's own per-Pokemon revert call instead.
+        out = rcon("niftygmax revert %s %d" % (player, slot))
+        # Trust the command, not the NBT. Cobblemon's party store persists on its own
+        # schedule - a `.dat` read can lag a successful revert by nearly a minute, which made
+        # three separate tests look like failures.
+        if "Reverted" in out:
+            tell(player, "%s is back to its normal form." % name)
             log("REVERT %s slot %d (%s)" % (player, slot, name))
+        elif "not showing" in out:
+            tell(player, "%s was not showing a Gigantamax form." % name)
+            log("REVERT no-op %s slot %d (%s)" % (player, slot, name))
         else:
             tell(player, "Could not change %s back - tell an admin." % name, "red")
-            log("REVERT FAILED %s slot %d (%s)" % (player, slot, name))
+            log("REVERT FAILED %s slot %d (%s): %s" % (player, slot, name, out[:120]))
         return
 
     ok, why = G.eligible(mon)
@@ -136,11 +145,11 @@ def toggle(player, slot):
         for _ in range(3):
             time.sleep(1.5)
             after = G.party(uuid).get(slot - 1) or {}
-            if str(after.get("FormId")) == "gmax":
+            if gmax_shown(after):
                 break
-        if str(after.get("FormId")) == "gmax":
+        if gmax_shown(after):
             break
-    if str(after.get("FormId")) == "gmax":
+    if gmax_shown(after):
         tell(player, "%s is showing its Gigantamax form. Recall and resummon it if the "
                       "model has not changed yet." % name, "light_purple")
         log("APPLY %s slot %d (%s)" % (player, slot, name))

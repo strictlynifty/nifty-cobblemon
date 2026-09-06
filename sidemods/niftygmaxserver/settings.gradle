@@ -1,0 +1,14 @@
+pluginManagement {
+    repositories {
+        maven { url = 'https://maven.fabricmc.net/' }
+        // Architectury's loom fork. Plain fabric-loom 1.9 cannot remap Cobblemon: it is built
+        // with Kotlin 2.2 and loom 1.9's bundled kotlinx-metadata only understands 2.1.
+        // Mega Showdown builds against this same Cobblemon using architectury loom, so use
+        // the toolchain that is known to work rather than fighting the older one.
+        maven { url = 'https://maven.architectury.dev/' }
+        maven { url = 'https://files.minecraftforge.net/maven/' }
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+rootProject.name = 'niftygmaxserver'

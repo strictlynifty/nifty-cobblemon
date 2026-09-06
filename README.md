@@ -28,6 +28,11 @@ for Gigantamax — a G-max form is only visible mid-battle beside a Power Spot. 
 to Cobblemon's public `POKEMON_INTERACTION_GUI_CREATION` event and adds an option that sends
 `/trigger gmax set <slot>`; a server-side script does the rest. Contains no Mega Showdown code.
 
+**`sidemods/niftygmaxserver`** — server-only companion to the above. Adds
+`/niftygmax revert <player> <slot>`, the only way to turn a Gigantamax display back off
+without `/msd hard_reset` nuking the player's whole party and PC. Separate from `niftygmax` so
+the client jar never needs reissuing.
+
 **`sidemods/niftycards`** — server-only. Two changes to
 [Cobblemon Cards](https://modrinth.com/mod/cobblemon-cards) 1.0.4's Binder:
 
@@ -88,8 +93,8 @@ it works rather than because it's pretty.
 player earned with a Max Soup. It's rideable, and stays normal-sized because the 4× comes from
 `startGradualScaling` on the battle path rather than from the form.
 
-**Turning it back off is the unsolved part.** The model follows the `gmax` *aspect*, which
-comes from Cobblemon's `dynamax_form` species feature — not from `FormId`. That feature is:
+**Turning it back off needs a mod.** The model follows the `gmax` *aspect*, which comes from
+Cobblemon's `dynamax_form` species feature — not from `FormId`. That feature is:
 
 ```json
 {"type":"choice","keys":["dynamax_form"],"default":"none",
@@ -97,25 +102,27 @@ comes from Cobblemon's `dynamax_form` species feature — not from `FormId`. Tha
 ```
 
 `none` is the default but is **not one of the choices**, so `pokeedit dynamax_form=none` is
-rejected by the choice validator and prints "Edited ..." having done nothing. Neither
-`unaspect=gmax`, `gmax=false` nor an empty value clears it either. `form=normal` changes
-`FormId` only, which does not affect the model at all — if you verify a revert by reading
-`FormId` you will get a false success, which is exactly the trap this repo fell into.
+rejected by the validator while still printing "Edited ...". `unaspect=gmax` and `gmax=false`
+do nothing either, and `aspect=gmax=false` makes it worse by setting `FormId` back to `gmax`.
+`form=normal` changes `FormId` only, which does not affect the model at all — **if you verify
+a revert by reading `FormId` you will get a false success**, which is the trap this project
+spent a long time in.
 
-The only thing that clears it is `/msd hard_reset`, which walks the entire party **and PC**,
-reverts every Mega and G-max, and clears `GmaxFactor` — so players have to re-feed Max Soups.
-That is far too blunt to use as a toggle.
-
-The proper fix is a server-side sidemod calling Mega Showdown's own revert for a single
-Pokémon, which is what `hard_reset` does internally:
+`sidemods/niftygmaxserver` fixes it with `/niftygmax revert <player> <slot>`, making the same
+call `/msd hard_reset` makes internally, for one Pokémon:
 
 ```java
 Effect.getEffect("mega_showdown:dynamax")
       .revertEffects(pokemon, List.of("dynamax_form=none"), Optional.empty(), null);
 ```
 
-Not built yet. Until it is, `gmaxwatch.py`'s revert path reports success while doing nothing
-visible.
+Verified end to end: the aspect clears and **`GmaxFactor` is preserved**, so reverting costs
+the player nothing — unlike `hard_reset`, which walks the whole party *and* PC and wipes
+`GmaxFactor` so everyone has to re-feed Max Soups.
+
+One thing that will waste your time: Cobblemon's party store persists on its own schedule, not
+on `save-all`. A successful revert can take up to a minute to appear in the `.dat`. Trust the
+command's answer, not the file.
 
 ## What is deliberately not here
 
