@@ -26,6 +26,8 @@ HOST="${WIKI_HOST:?set WIKI_HOST to the ssh alias of your server}"
 # bare VAR=value prefix binds it only to the first command, so `cd /tmp && python3`
 # runs the python without it and the build silently reads /srv/cobblemon instead.
 REMOTE_DIR="${COBBLEMON_DIR:-/srv/cobblemon}"
+# build3.py runs on the SERVER, so anything the page needs must cross the ssh
+# boundary too - passing only COBBLEMON_DIR left the address as a placeholder.
 
 
 # build3.py reads three inputs that NOTHING here regenerates - wiki_parts.json,
@@ -36,7 +38,7 @@ REMOTE_DIR="${COBBLEMON_DIR:-/srv/cobblemon}"
 # They now live in wiki-inputs/ on the server. Restore any that are missing before
 # building, and fail loudly rather than building a half-empty page.
 echo "==> restoring build inputs if /tmp was cleared"
-ssh "$HOST" "export COBBLEMON_DIR=$REMOTE_DIR;" 'set -e
+ssh "$HOST" "export COBBLEMON_DIR=$REMOTE_DIR WIKI_SERVER_ADDR='${WIKI_SERVER_ADDR:-your server}';" 'set -e
   SRC=${COBBLEMON_DIR:-/srv/cobblemon}/wiki-inputs
   for f in wiki_parts.json wiki_data2.json wiki_data3.json; do
     if [ ! -s "/tmp/$f" ]; then
@@ -55,22 +57,22 @@ scp -q "$HERE/build3.py"      "$HOST:/tmp/build3.py"
 scp -q "$HERE/dex-sprites.json" "$HOST:/tmp/dex-sprites.json" || echo "    (no dex-sprites.json - dex will build without pictures)"
 
 echo "==> 0/2 describing the client package from the package itself"
-ssh "$HOST" "export COBBLEMON_DIR=$REMOTE_DIR;" 'python3 /tmp/wikiclientpkg.py'
+ssh "$HOST" "export COBBLEMON_DIR=$REMOTE_DIR WIKI_SERVER_ADDR='${WIKI_SERVER_ADDR:-your server}';" 'python3 /tmp/wikiclientpkg.py'
 
 echo "==> 1/2 building the recipe + acquisition index"
-ssh "$HOST" "export COBBLEMON_DIR=$REMOTE_DIR;" 'python3 /tmp/wikiindex.py'
+ssh "$HOST" "export COBBLEMON_DIR=$REMOTE_DIR WIKI_SERVER_ADDR='${WIKI_SERVER_ADDR:-your server}';" 'python3 /tmp/wikiindex.py'
 
 echo "==> verifying the index landed"
-ssh "$HOST" "export COBBLEMON_DIR=$REMOTE_DIR;" 'test -s /tmp/wiki_recipes.json' || {
+ssh "$HOST" "export COBBLEMON_DIR=$REMOTE_DIR WIKI_SERVER_ADDR='${WIKI_SERVER_ADDR:-your server}';" 'test -s /tmp/wiki_recipes.json' || {
   echo "FATAL: /tmp/wiki_recipes.json missing or empty - refusing to build a wiki with no tutorials" >&2
   exit 1
 }
 
 echo "==> 2/2 building the page"
-ssh "$HOST" "export COBBLEMON_DIR=$REMOTE_DIR;" 'cd /tmp && python3 build3.py'
+ssh "$HOST" "export COBBLEMON_DIR=$REMOTE_DIR WIKI_SERVER_ADDR='${WIKI_SERVER_ADDR:-your server}';" 'cd /tmp && python3 build3.py'
 
 echo "==> verifying tutorials actually rendered"
-ssh "$HOST" "export COBBLEMON_DIR=$REMOTE_DIR;" 'python3 - <<PY
+ssh "$HOST" "export COBBLEMON_DIR=$REMOTE_DIR WIKI_SERVER_ADDR='${WIKI_SERVER_ADDR:-your server}';" 'python3 - <<PY
 import io, re, sys, json
 s = io.open("/tmp/mc-wiki.html", encoding="utf-8").read()
 bad = []
