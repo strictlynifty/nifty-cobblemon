@@ -154,48 +154,51 @@ shims and the class it mixes into lives in there.
 Two traps: the Kotlin plugin must be 2.2.x or Loom can't remap Cobblemon, and use
 `dev.architectury.loom` rather than plain `fabric-loom`.
 
-## Build a wiki for your own modpack
+## The wiki lives in its own repo
 
-`wiki/` generates a single self-contained HTML page from **the jars you actually have**.
-Nothing in it is hand-written: the Pokedex, drops, spawn conditions, recipes, loot chances,
-structures and trainer teams are all read out of the installed mods at build time. Point it at
-a different modpack and you get a wiki for that modpack.
+The wiki generator and the model renderer moved to
+**[cobblemon-wiki](https://github.com/strictlynifty/cobblemon-wiki)** — they work on any
+modpack, so they did not belong in a repo about one server. That repo builds a single-file
+HTML reference from whatever jars you have installed, and renders every species, shiny,
+regional form, Mega and Gigantamax to PNG.
 
-```sh
-cp wiki/local.env.example wiki/local.env   # WIKI_HOST, COBBLEMON_DIR, WIKI_SERVER_ADDR
-./wiki/build-wiki.sh
-```
+## Hosting
 
-It runs the heavy work over ssh on the server (that is where the jars and world live) and
-fetches the finished page. `COBBLEMON_DIR` defaults to `/srv/cobblemon`.
+`server/` is what actually runs this thing: a systemd unit, the launch script, a graceful
+stop, a backup with a free-space floor, a restart-when-empty helper that never kicks anyone,
+and the rcon helpers everything else is built on.
 
-Order matters and the script enforces it: the recipe index must exist before the page is
-built, or ~92 tutorials silently vanish from a build that otherwise looks fine.
+`server/start.sh` is worth reading even if you use none of the rest — it carries the full
+reasoning behind the heap size, including the measurements that showed 5G was *worse* than 4G
+on an 8G box (AlwaysPreTouch commits the whole heap, the JVM starts paging, and tick times
+scatter while TPS still reads a flat 20.0). Sizing a Minecraft heap by "more is better" is how
+you get stutter.
 
-## Render any Pokemon to a PNG
+`server/cobblemon-backup.sh` refuses to run below a free-space floor rather than filling the
+disk, and keeps three days — a 33 GB world at radius 15000 does not let you keep seven.
 
-`tools/mcrender.py` renders Cobblemon's Bedrock models offline. Cobblemon ships no 2D sprite
-for anything - the party screen renders the 3D model live - so this is the only way to get a
-picture of a species, a shiny, a regional form, a Mega or a Gigantamax without taking a
-screenshot in game.
+## Notes
 
-```sh
-python tools/mcrender.py <jar-or-dir> vulpix alolan,shiny -o vulpix.png --size 256
-python tools/mcrender.py <jar-or-dir> charizard --list-aspects
-python tools/dexrender.py render <jar-dir>     # every species/form -> PNGs
-python tools/dexrender.py pack   <out-dir>     # -> atlas sheets + manifest
-```
+`NOTES.md` is the useful part: **164 sections** of findings from a few months of running this
+— mod conflicts, datapack behaviour, Bedrock model quirks, Minecraft internals, and a fair
+number of things that looked like one problem and turned out to be another. Written as we hit
+them, so they are specific rather than general. Names, UUIDs, coordinates and paths are
+scrubbed; the findings are not.
 
-Pure Python plus Pillow, no GPU. Three things it has to get right, each found by rendering
-and looking rather than by reasoning:
+A sample of what is in there:
 
-- **The bind pose is not the pose you see.** Bulbasaur's Vine Whip bones lie flat out to
-  x=+-34 until an animation tucks them in. The resting frame of the PROFILE pose fixes it.
-- **Bedrock negates Y and Z rotation.** A model with one or two rotated bones looks fine
-  either way, so test on a deep chain - Alcremie's head swirl flings pieces off otherwise.
-- **Minecraft shades by face direction, not by a light.** Lambert shading turns Vulpix brown.
+- Two mods shipping the same asset path means one silently wins, and the loser's *texture*
+  may still be in use — that is what a Pokémon with scattered UVs and missing faces is.
+- `species_additions` applies collections with `addAll`, so a `forms` entry **appends** a form
+  rather than merging into the existing one. You cannot patch a form that way.
+- A form declaring its own `riding` block ignores the species-level one entirely.
+- Mega, Primal and Gigantamax are gated in three different places: Mega in a mod's own data,
+  Primal by the battle simulator via a plain held-item remap, Gigantamax by an item plus a
+  worn one.
+- `locate structure` reports where a structure was *placed*, not whether it is usable.
+- `enable-command-block=false` makes structure buttons do nothing at all, with no error.
 
-## Other tools
+## Other tools## Other tools
 
 | Tool | What it does |
 |---|---|
@@ -207,6 +210,12 @@ and looking rather than by reasoning:
 | `tools/mkformseats.py` | Give the second seat to forms that declare their own riding |
 | `tools/voxel.py` | Read a real cuboid of blocks out of the region files |
 | `tools/itemhunt.py` | Where an item can actually come from - recipes, loot, trades |
+| `tools/disasm.py` | Disassemble a method's bytecode with constants resolved inline |
+| `tools/aspectmodels.py` | Which aspects actually change a Pokemon's model, not just its poser |
+| `tools/cosmeticscan.py` | Which species a cosmetic item will visually break |
+| `tools/stackguard.py` | Clamp dropped stacks too big for the world save to survive |
+| `tools/clearbox.py` | Clear a region with a full restore file, straight from the region files |
+| `examples/` | Server-specific automation kept as worked examples, not as a product |
 
 ## Which mods this was built against
 

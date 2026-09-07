@@ -1,0 +1,21 @@
+[Unit]
+Description=Cobblemon Minecraft server
+After=network.target
+
+[Service]
+Type=simple
+User=minecraft
+Group=minecraft
+WorkingDirectory=$COBBLEMON_DIR
+ExecStart=$COBBLEMON_DIR/start.sh
+ExecStop=$COBBLEMON_DIR/stop.sh
+TimeoutStopSec=120
+Restart=on-failure
+RestartSec=15
+SuccessExitStatus=0 143
+# Shared box: if the kernel ever has to OOM-kill something, make the game
+# server the preferred victim rather than other services on the box.
+OOMScoreAdjust=200
+
+[Install]
+WantedBy=multi-user.target
