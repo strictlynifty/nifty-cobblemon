@@ -153,3 +153,121 @@ shims and the class it mixes into lives in there.
 
 Two traps: the Kotlin plugin must be 2.2.x or Loom can't remap Cobblemon, and use
 `dev.architectury.loom` rather than plain `fabric-loom`.
+
+## Build a wiki for your own modpack
+
+`wiki/` generates a single self-contained HTML page from **the jars you actually have**.
+Nothing in it is hand-written: the Pokedex, drops, spawn conditions, recipes, loot chances,
+structures and trainer teams are all read out of the installed mods at build time. Point it at
+a different modpack and you get a wiki for that modpack.
+
+```sh
+cp wiki/local.env.example wiki/local.env   # WIKI_HOST, COBBLEMON_DIR, WIKI_SERVER_ADDR
+./wiki/build-wiki.sh
+```
+
+It runs the heavy work over ssh on the server (that is where the jars and world live) and
+fetches the finished page. `COBBLEMON_DIR` defaults to `/srv/cobblemon`.
+
+Order matters and the script enforces it: the recipe index must exist before the page is
+built, or ~92 tutorials silently vanish from a build that otherwise looks fine.
+
+## Render any Pokemon to a PNG
+
+`tools/mcrender.py` renders Cobblemon's Bedrock models offline. Cobblemon ships no 2D sprite
+for anything - the party screen renders the 3D model live - so this is the only way to get a
+picture of a species, a shiny, a regional form, a Mega or a Gigantamax without taking a
+screenshot in game.
+
+```sh
+python tools/mcrender.py <jar-or-dir> vulpix alolan,shiny -o vulpix.png --size 256
+python tools/mcrender.py <jar-or-dir> charizard --list-aspects
+python tools/dexrender.py render <jar-dir>     # every species/form -> PNGs
+python tools/dexrender.py pack   <out-dir>     # -> atlas sheets + manifest
+```
+
+Pure Python plus Pillow, no GPU. Three things it has to get right, each found by rendering
+and looking rather than by reasoning:
+
+- **The bind pose is not the pose you see.** Bulbasaur's Vine Whip bones lie flat out to
+  x=+-34 until an animation tucks them in. The resting frame of the PROFILE pose fixes it.
+- **Bedrock negates Y and Z rotation.** A model with one or two rotated bones looks fine
+  either way, so test on a deep chain - Alcremie's head swirl flings pieces off otherwise.
+- **Minecraft shades by face direction, not by a light.** Lambert shading turns Vulpix brown.
+
+## Other tools
+
+| Tool | What it does |
+|---|---|
+| `tools/modwatch.py` | Which installed mods have updates, and which secretly need a newer Cobblemon |
+| `tools/gymsite.py` | Whether a generated structure is actually playable - water inside it, buried below ground |
+| `tools/pokescan.py` | List Pokemon entities from the saved chunks with their aspects |
+| `tools/mkmegafix.py` | Resource pack repairing Mega models one mod overwrites with a stale copy |
+| `tools/mkseatpack.py` | Rebuild a two-seat resource pack against the current jars |
+| `tools/mkformseats.py` | Give the second seat to forms that declare their own riding |
+| `tools/voxel.py` | Read a real cuboid of blocks out of the region files |
+| `tools/itemhunt.py` | Where an item can actually come from - recipes, loot, trades |
+
+## Which mods this was built against
+
+The wiki generator reads whatever is installed, but the server-specific bits (gym mapping,
+trainer series, card rewards) assume this set. Minecraft 1.21.1, Fabric, Cobblemon 1.7.3.
+
+| Mod | Version |
+|---|---|
+| Accessories | `1.1.0-beta.53+1.21.1` |
+| Architectury | `13.0.11` |
+| Athena | `4.0.6` |
+| Baby Legends (Cobblemon) | `2.4` |
+| BoniMons [Cobblemon] | `1` |
+| Chipped | `4.0.2` |
+| Chunky | `1.4.23` |
+| Cloth Config v15 | `15.0.140` |
+| CobbleCuisine | `2.0.1` |
+| CobbleDollars | `2.0.0+Beta-6.1+1.21.1` |
+| CobbleFurnies | `1.2` |
+| Cobblemon | `1.7.3+1.21.1` |
+| Cobblemon Additions | `4.3.0` |
+| Cobblemon Capture XP | `1.7.3-fabric-1.3.0` |
+| Cobblemon Cards | `1.0.0` |
+| Cobblemon Journey Mounts | `1.7.2` |
+| Cobblemon Party Extras | `1.8.15` |
+| Cobblemon Research Tasks | `2.0` |
+| Cobblemon:Mega Showdown | `1.9.5+1.7.3+1.21.1` |
+| Cobblenav | `2.3.3` |
+| Cobbreeding | `2.2.2` |
+| Easy Shulker Boxes | `21.1.3` |
+| Fabric API | `0.116.15+1.21.1` |
+| FerriteCore | `7.0.3` |
+| Forge Config API Port | `21.1.6` |
+| Krypton | `0.2.8` |
+| Legendary Monuments | `8.0.3` |
+| Lithium | `0.15.4+mc1.21.1` |
+| Lithostitched | `1.7.13` |
+| LuckPerms | `5.4.140` |
+| MiniTeleport | `1.0.0+mc1.21.1` |
+| MissingMons [cobblemon] | `3.6.1` |
+| Monkeymons [Cobblemon] | `1.1` |
+| Myths and Legends | `1.9.0` |
+| Noisium | `2.3.0+mc1.21-1.21.1` |
+| oωo | `0.12.15.4+1.21` |
+| PastureLoot | `1.0.5+1.21.1` |
+| PlayerXP | `1.0.9+1.21.1` |
+| Puzzles Lib | `21.1.52` |
+| Radical Cobblemon Trainers | `0.18.1-beta` |
+| Radical Cobblemon Trainers API | `0.15.2-beta` |
+| Radical Gyms & Structures - RGS | `1.21` |
+| Resourceful Lib | `3.0.12` |
+| Rustling Spots | `4.3` |
+| Server Waypoint | `3.0.3` |
+| spark | `1.10.109` |
+| Spawn Notification | `1.7.3-fabric-2.3.0` |
+| Tim Core | `1.7.3-fabric-1.32.0` |
+| Vanilla Permissions | `0.3.3+1.21.1` |
+
+## No server details in here
+
+No hostnames, IPs, player names or credentials. Paths come from `$COBBLEMON_DIR`, the server
+address from `$WIKI_SERVER_ADDR`, and the ssh alias from `$WIKI_HOST` - all via `local.env`,
+which is gitignored. The rcon password is read from a file on the server that has never been
+committed.
